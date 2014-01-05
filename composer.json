@@ -11,12 +11,12 @@
         "creocoder/yii2-nested-set": "dev-master",
         "yiisoft/yii2-jui": "*"
     },
-    "license": "BSD-3_Clause",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Pascal Brewing",
-            "email": "<pascalbrewing@gmail.com>",
-            "homepage": "http://pascal-breiwng.de/",
+            "email": "pascalbrewing@gmail.com",
+            "homepage": "http://pascal-brewingg.de/",
             "role": "Founder and development"
         }
     ],
