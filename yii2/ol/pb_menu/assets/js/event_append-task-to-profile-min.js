@@ -1,0 +1,1 @@
+$(function(){$(".appendToList").on("click",function(e){e.preventDefault();$(document).trigger("append-task-to-profile",[$(this).data("id")])});$("#serialize").click(function(){event.preventDefault();$(document).trigger("task-save")})});

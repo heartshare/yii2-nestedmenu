@@ -1,0 +1,1 @@
+$(function(){$(".appendToList").on("click",function(e){e.preventDefault(),$(document).trigger("create-list-item",[$(this).data("id")])}),$("#serialize").click(function(){event.preventDefault(),$(document).trigger("task-save")}),$(".editListItem").on("click",function(e){e.preventDefault(),$(document).trigger("update-list-item",[$(this).data("id")])})});
