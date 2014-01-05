@@ -26,6 +26,6 @@
     },
     "minimum-stability": "dev",
     "autoload": {
-        "psr-4": {"nestedmenu\\": "yii2/"}
+        "psr-4": {"nestedmenu\\": "src/"}
     }
 }
