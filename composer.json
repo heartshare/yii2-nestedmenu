@@ -20,6 +20,9 @@
             "role": "Founder and development"
         }
     ],
+    "support": {
+        "source": "https://bitbucket.org/DrMabuse/nestedmenu/src"
+    },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {"nestedmenu\\": "yii2/"}
