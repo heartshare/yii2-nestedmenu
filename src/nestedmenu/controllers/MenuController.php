@@ -139,7 +139,7 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        VarDumper::dump($model->attributes,10,true);
+//        VarDumper::dump($model->attributes,10,true);
         $this->registerJsProfile($model);
         if ($model->load($_POST) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
