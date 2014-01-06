@@ -1,7 +1,7 @@
 {
     "name": "drmabuse/nestedmenu",
     "description": "Yii 2 Nested Set Menu",
-    "keywords": ["yii", "nestedset","menu" ],
+    "keywords": ["yii-2", "nestedset","menu" ],
     "homepage": "http://pascal-brewing.de",
     "type": "project",
     "license": "BSD-3-Clause",
