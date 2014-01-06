@@ -5,11 +5,12 @@
     "homepage": "http://pascal-brewing.de",
     "type": "project",
     "license": "BSD-3-Clause",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "master"
     },
-    "minimum-stability": "alpha",
+    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Pascal Brewing",
