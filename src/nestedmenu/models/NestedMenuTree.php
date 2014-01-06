@@ -58,7 +58,7 @@ class NestedMenuTree extends \yii\db\ActiveRecord
     public function behaviors() {
         return array(
             'tree' => array(
-                'class' => 'common\modules\nestedmenu\behaviors\NestedSet',
+                'class' => 'nestedmenu\behaviors\NestedSet',
                 'hasManyRoots'=>true
             ),
         );

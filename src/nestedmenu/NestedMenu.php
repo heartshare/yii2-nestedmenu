@@ -9,7 +9,7 @@ use yii\helpers\VarDumper;
 
 class NestedMenu extends \yii\base\Module
 {
-	public $controllerNamespace = 'common\modules\nestedmenu\controllers';
+	public $controllerNamespace = 'nestedmenu\controllers';
 
 	public function init()
 	{
