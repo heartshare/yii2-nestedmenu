@@ -9,7 +9,7 @@
     "require": {
         "php": ">=5.4.0"
     },
-    "minimum-stability": "*",
+    "minimum-stability": "alpha",
     "authors": [
         {
             "name": "Pascal Brewing",
