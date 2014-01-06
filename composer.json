@@ -8,9 +8,9 @@
     "version": "0.0.2",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "dev-master",
+        "yiisoft/yii2": "dev-master"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "dev-master",
     "authors": [
         {
             "name": "Pascal Brewing",
