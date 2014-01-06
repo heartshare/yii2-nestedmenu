@@ -4,7 +4,7 @@ namespace nestedmenu;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\modules\nestedmenu\models\Menu;
+use nestedmenu\models\Menu;
 
 /**
  * MenuQuery represents the model behind the search form about Menu.

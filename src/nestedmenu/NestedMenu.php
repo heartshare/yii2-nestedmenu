@@ -3,7 +3,7 @@
 
 namespace nestedmenu;
 
-use common\modules\nestedmenu\assets\NestedAssets;
+use nestedmenu\assets\NestedAssets;
 use Yii;
 use yii\helpers\VarDumper;
 

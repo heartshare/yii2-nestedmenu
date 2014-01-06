@@ -1,7 +1,7 @@
 <?php
 
 namespace nestedmenu\models;
-use common\modules\nestedmenu\behaviors\NestedSet;
+use nestedmenu\behaviors\NestedSet;
 
 /**
  * This is the model class for table "tbl_nested_menu_tree".

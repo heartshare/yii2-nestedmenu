@@ -10,9 +10,9 @@ namespace nestedmenu\helpers;
 
 use yii\twig\ViewRenderer;
 
-use common\modules\nestedmenu\Typo;
-use common\modules\nestedmenu\Glyph;
-use common\modules\nestedmenu\ActiveFormHelper;
+use nestedmenu\Typo;
+use nestedmenu\Glyph;
+use nestedmenu\ActiveFormHelper;
 
 /**
  * Class TwigViewRenderer

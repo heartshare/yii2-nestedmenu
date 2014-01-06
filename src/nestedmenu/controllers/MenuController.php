@@ -3,13 +3,13 @@
 namespace nestedmenu\controllers;
 
 use Yii;
-use common\modules\nestedmenu\helpers\Sanitizer;
-use common\modules\nestedmenu\helpers\Typo;
-use common\modules\nestedmenu\helpers\Glyph;
-use common\modules\nestedmenu\models\NestedMenuProfile;
-use common\modules\nestedmenu\models\NestedMenuConfig;
-use common\modules\nestedmenu\models\NestedMenuTree;
-use common\modules\nestedmenu\models\NestedMenuQuery;
+use nestedmenu\helpers\Sanitizer;
+use nestedmenu\helpers\Typo;
+use nestedmenu\helpers\Glyph;
+use nestedmenu\models\NestedMenuProfile;
+use nestedmenu\models\NestedMenuConfig;
+use nestedmenu\models\NestedMenuTree;
+use nestedmenu\models\NestedMenuQuery;
 
 use yii\helpers\VarDumper;
 use yii\web\Controller;

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\modules\nestedmenu\helpers\ActiveFormHelper;
+use nestedmenu\helpers\ActiveFormHelper;
 
 /**
  * @var yii\web\View $this

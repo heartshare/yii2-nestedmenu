@@ -1,5 +1,5 @@
 <?php
-use common\modules\nestedmenu\helpers\Glyph;
+use nestedmenu\helpers\Glyph;
 
 //$config = common\modules\nestedmenu\models\NestedMenuConfig::find()->where(['tree_id' => $model->id]);
 //$profile = common\modules\nestedmenu\models\NestedMenuProfile::find()->where(['tree_id' => $model->id]);
