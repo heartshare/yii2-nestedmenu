@@ -3,13 +3,13 @@
 
 namespace nestedmenu;
 
-use nestedmenu\assets\NestedAssets;
+use common\modules\nestedmenu\assets\NestedAssets;
 use Yii;
 use yii\helpers\VarDumper;
 
 class NestedMenu extends \yii\base\Module
 {
-	public $controllerNamespace = 'nestedmenu\controllers';
+	public $controllerNamespace = 'common\modules\nestedmenu\controllers';
 
 	public function init()
 	{

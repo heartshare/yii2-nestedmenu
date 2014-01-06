@@ -4,7 +4,7 @@ namespace nestedmenu\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use nestedmenu\models\Menu;
+use common\modules\nestedmenu\models\NestedMenuTree;
 
 /**
  * NestedMenuQuery represents the model behind the search form about NestedMenu.
@@ -52,7 +52,7 @@ class NestedMenuQuery extends Model
 
 	public function search($params)
 	{
-		$query = Menu::find();
+		$query = NestedMenuTree::find();
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
 		]);
@@ -66,6 +66,7 @@ class NestedMenuQuery extends Model
 		$this->addCondition($query, 'lft');
 		$this->addCondition($query, 'rgt');
 		$this->addCondition($query, 'level');
+
 		return $dataProvider;
 	}
 

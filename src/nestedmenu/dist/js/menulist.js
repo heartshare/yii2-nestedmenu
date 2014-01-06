@@ -7,10 +7,14 @@
         $modalOpen:false,
         $newTask:{},
         $root_id:'',
+        $csrf_token:null,
+        $csrf_param:null,
         init: function () {
-            this.$modalHolder = $('#demo_modal');
+            this.$modalHolder = $('#nested_menu_modal');
             this.$requestUrl = appendTaskUrl;
+            this._getCsrf();
             this._registerEventListener();
+            this.$modalHolder.find('btn-success').on('click',function(event){event.preventDefault()});
         },
         _registerEventListener:function()
         {
@@ -21,6 +25,14 @@
         _getEditForm:function(event,modelId){
             var updateUrl = updateTreeUrl+'/id/'+modelId,
                 self = this;
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Basic"
+                },
+                beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", self.$csrf_token);
+                }
+            });
             $.ajax({
                 'url': updateUrl,
                 'type':'POST'
@@ -39,20 +51,20 @@
 
             var self = this;
             $.ajax({
-                'url': self.$requestUrl+'/root_id/'+self.$root_id,
+                'url': self.$requestUrl+'?root_id='+self.$root_id,
                 'type':'POST'
             })
             .done(function(formBody){
-                self._addFormBody(formBody,'#todo-list-task-_form_todolisttask-form','Neuen Menüpunkt hinzufügen');
+                self._addFormBody(formBody,'#form_create_leave','Neuen Menüpunkt hinzufügen');
             })
             .error(function(){
 
             });
         },
         _addFormBody:function(body,formId,headline){
-            $('.modal-header').children('h4').text(headline);
-            $('.modal-body').children('p').html(body);
-
+            $('.modal-header').children('h2').text(headline);
+            $('.modal-body').html(body);
+            console.log(body);
             this.$form = $(formId);
             if(!this.$modalOpen){
                 this._openForm();
@@ -72,9 +84,12 @@
         },
         _registerFormEvent:function(){
             var self = this;
-            this.$form.on('submit',function(event){
+            console.log(self.$form);
+            self.$form.on('submit',function(event){
                 event.preventDefault();
                 self.$newTask = $(this).serialize();
+                console.log(['self.$newTask',self.$newTask])
+                //return;
                 self._sendForm(self.$newTask,$(this).attr('action'));
             });
         },
@@ -89,12 +104,14 @@
                 'type':'POST',
                 'data':data
             }).done(function(data){
+                    console.log(data);
+                    return;
                 if(self._isJson(data))
                 {
                     data = $.parseJSON(data);
                     console.log(data.redirect);
                     self.$modalHolder.modal('hide');
-                    window.location.href= data.redirect;
+//                    window.location.href= data.redirect;
                     return;
                 }
                 self._addFormBody(data);
@@ -119,6 +136,11 @@
             }
             return IS_JSON;
 
+        },
+        _getCsrf:function(){
+            var self = this;
+            self.$csrf_token = $('meta[name=csrf-token]').attr('content');
+            self.$csrf_param = $('meta[name=csrf-var]').attr('content');
         }
     };
 

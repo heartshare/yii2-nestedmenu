@@ -2,10 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\modules\nestedmenu\helpers\ActiveFormHelper;
 
 /**
  * @var yii\web\View $this
- * @var nestedmenu\models\NestedMenu $model
+ * @var common\modules\nestedmenu\models\NestedMenu $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -15,7 +16,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'options' => ['class' => 'form-horizontal'],
         'fieldConfig' => [
-            'template' => \common\helpers\ActiveFormHelper::formHorizontalGroupTemplate('col-lg-10'),
+            'template' => ActiveFormHelper::formHorizontalGroupTemplate('col-lg-10'),
             'labelOptions' => [
                 'class' => 'col-lg-2 control-label'
             ],
@@ -23,7 +24,7 @@ use yii\widgets\ActiveForm;
     ]); ?>
 		<?= $form->field($model, 'title')->textInput() ?>
 		<?= $form->field($model, 'description')->textarea() ?>
-    <?= \common\helpers\ActiveFormHelper::horizontalFormButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <?= ActiveFormHelper::horizontalFormButton($model->isNewRecord ? 'Create' : 'Update', $model->isNewRecord ?['buttonOptions'=>['class' =>  'btn btn-success']]:[]) ?>
 	<?php ActiveForm::end(); ?>
 
 </div>

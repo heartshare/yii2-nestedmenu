@@ -2,10 +2,15 @@
 
 namespace nestedmenu\controllers;
 
-use nestedmenu\helpers\Sanitizer;
-use nestedmenu\models\Menu;
-use nestedmenu\models\MenuProfile;
-use nestedmenu\models\NestedMenuQuery;
+use Yii;
+use common\modules\nestedmenu\helpers\Sanitizer;
+use common\modules\nestedmenu\helpers\Typo;
+use common\modules\nestedmenu\helpers\Glyph;
+use common\modules\nestedmenu\models\NestedMenuProfile;
+use common\modules\nestedmenu\models\NestedMenuConfig;
+use common\modules\nestedmenu\models\NestedMenuTree;
+use common\modules\nestedmenu\models\NestedMenuQuery;
+
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -15,7 +20,7 @@ use yii\web\View;
 /**
  * MenuController implements the CRUD actions for Menu model.
  * Class MenuController
- * @package nestedmenu\controllers
+ * @package common\modules\nestedmenu\controllers
  */
 class MenuController extends Controller
 {
@@ -27,10 +32,28 @@ class MenuController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'createLeave' => ['post']
                 ],
             ],
+//            'access' => [
+//                'class' => \yii\web\AccessControl::className(),
+//                'only' => ['createLeave', 'signup'],
+//                'rules' => [
+//                    [
+//                        'actions' => ['signup'],
+//                        'allow' => true,
+//                        'roles' => ['?'],
+//                    ],
+//                    [
+//                        'actions' => ['logout'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
         ];
     }
+
 
     /**
      * Lists all Menu models.
@@ -40,7 +63,6 @@ class MenuController extends Controller
     {
         $searchModel = new NestedMenuQuery;
         $dataProvider = $searchModel->search($_GET);
-//        VarDumper::dump(\Yii::$app->db->driverName,100,true);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
@@ -66,25 +88,47 @@ class MenuController extends Controller
      */
     public function actionCreate()
     {
-        $model = new MenuProfile();
+        $model = new NestedMenuProfile();
 
         if ($model->load($_POST)) {
-            $root = new Menu();
+
+            $root = new NestedMenuTree();
             $root->title = Sanitizer::getSanitizedUrlValue($model->title);
-            $root->root = 1;
             if ($root->saveNode()) {
+                $config = new NestedMenuConfig();
+                $config->tree_id = $root->id;
+                $config->save(false);
+
                 $model->tree_id = $root->id;
                 $model->slug = $root->title;
+
+                $uniqueTest = NestedMenuProfile::find()->where(['slug' => $root->title])->one();
+                if(!empty($uniqueTest))
+                    $model->slug = $model->slug.'-'.uniqid();
+
                 if ($model->save()) {
+                    Yii::$app->session->setFlash(
+                        'info',
+                        Typo::AlertBodyHelper(
+                            Glyph::icon(Glyph::ICON_BELL),
+                            'Tree saved'
+                        )
+                    );
                     return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    VarDumper::dump($model->getErrors(),10,true);
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
                 }
-            };
-        } else {
+            }
+        }else{
             return $this->render('create', [
                 'model' => $model,
             ]);
         }
     }
+
 
     /**
      * Updates an existing Menu model.
@@ -95,6 +139,7 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        VarDumper::dump($model->attributes,10,true);
         $this->registerJsProfile($model);
         if ($model->load($_POST) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -105,6 +150,48 @@ class MenuController extends Controller
         }
     }
 
+    public function actionCreateleave($root_id){
+//        VarDumper::dump($root_id,10,true);
+        $root = $this->findModel($root_id);
+        $model = new NestedMenuTree();
+//        VarDumper::dump($root->attributes,10,true);
+
+        if($model->load($_POST)){
+            $profile = new NestedMenuProfile();
+            $profile->title = $model->title;
+            $model->title = Sanitizer::getSanitizedUrlValue($model->title);
+            if($model->appendTo($root)){
+                $config = new NestedMenuConfig();
+
+                $profile->tree_id   = $model->id;
+                $config->tree_id    = $model->id;
+
+                $uniqueTest = NestedMenuProfile::find()->where(['slug' => $model->title])->one();
+
+                if(!empty($uniqueTest))
+                    $profile->slug = $profile->slug.'-'.uniqid();
+
+                if($profile->save() && $config->save()){
+                    echo json_encode(
+                        [
+                            'validate' => $model->validate(),
+                            'model' => $model->attributes,
+                            'root_id' => $root_id,
+                            'redirect' => $this->createUrl('update',array('id' => $root_id))
+                        ]
+                    );
+                    return;
+                }
+
+            }
+
+        }
+        echo $this->renderPartial('_form_create_leave', [
+            'model' => $model,
+            'action' => $this->createAbsoluteUrl('createleave',['root_id' => $root_id])
+        ]);
+    }
+
     /**
      * Deletes an existing Menu model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -113,7 +200,7 @@ class MenuController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->deleteNode();
         return $this->redirect(['index']);
     }
 
@@ -126,7 +213,7 @@ class MenuController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Menu::find($id)) !== null) {
+        if (($model = NestedMenuTree::find($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -140,7 +227,7 @@ class MenuController extends Controller
     {
         $view = $this->getView();
         $view->registerJs(
-            'var appendTaskUrl = "'.$this->createUrl('appendMenuList',array('list_id' => $model->id)).'"',
+            'var appendTaskUrl = "'.$this->createAbsoluteUrl('createleave').'"',
             View::POS_HEAD,
             'append-task-url'
         );

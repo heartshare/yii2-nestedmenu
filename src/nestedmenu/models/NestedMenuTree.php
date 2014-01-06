@@ -1,6 +1,7 @@
 <?php
 
 namespace nestedmenu\models;
+use common\modules\nestedmenu\behaviors\NestedSet;
 
 /**
  * This is the model class for table "tbl_nested_menu_tree".
@@ -31,7 +32,6 @@ class NestedMenuTree extends \yii\db\ActiveRecord
 	public function rules()
 	{
 		return [
-			[['title', 'root', 'lft', 'rgt', 'level'], 'required'],
 			[['root', 'lft', 'rgt', 'level'], 'integer'],
 			[['title'], 'string', 'max' => 255]
 		];
@@ -52,19 +52,66 @@ class NestedMenuTree extends \yii\db\ActiveRecord
 		];
 	}
 
+    /**
+     * @return array
+     */
+    public function behaviors() {
+        return array(
+            'tree' => array(
+                'class' => 'common\modules\nestedmenu\behaviors\NestedSet',
+                'hasManyRoots'=>true
+            ),
+        );
+    }
+//    /**
+//     * add the nested set package
+//     * @return array
+//     */
+//    public function behaviors()
+//    {
+//        return array(
+//            'tree' => array(
+//                'class' => 'creocoder\yii\behaviors\NestedSet',
+//
+//            ),
+//        );
+//    }
+    /**
+     * @param bool $insert
+     * @return bool|void
+     */
+//    public function afterSave($insert)
+//    {
+//        parent::afterSave($insert);
+//        if($this->isNewRecord){
+//            if((int)$this->root !== 1){
+//                $profile = new NestedMenuProfile();
+//                $profile->tree_id = $this->id;
+//                $profile->title = $this->title;
+//                $profile->save(false);
+//            }
+//
+//            $config = new NestedMenuConfig();
+//            $config->tree_id = $this->id;
+//
+//            if($config->save(false))
+//                return $insert;
+//        }
+//    }
+
 	/**
 	 * @return \yii\db\ActiveRelation
 	 */
-	public function getNestedMenuTreeConfigs()
+	public function getConfig()
 	{
-		return $this->hasMany(NestedMenuTreeConfig::className(), ['tree_id' => 'id']);
+		return $this->hasOne(NestedMenuConfig::className(), ['tree_id' => 'id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveRelation
 	 */
-	public function getNestedMenuTreeProfiles()
+	public function getProfile()
 	{
-		return $this->hasMany(NestedMenuTreeProfile::className(), ['tree_id' => 'id']);
+		return $this->hasOne(NestedMenuProfile::className(), ['tree_id' => 'id']);
 	}
 }

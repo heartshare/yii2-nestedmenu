@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var nestedmenu\models\NestedMenu $model
+ * @var common\modules\nestedmenu\models\NestedMenu $model
  */
 
 $this->title = 'Create Nested Menu';

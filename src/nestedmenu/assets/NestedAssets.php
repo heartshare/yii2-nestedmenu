@@ -10,7 +10,7 @@ use yii\web\AssetBundle;
  * Time: 13:19
  *
  * Class NestedAssets
- * @package nestedmenu\assets
+ * @package common\modules\nestedmenu\assets
  */
 class NestedAssets extends AssetBundle{
 
@@ -20,7 +20,8 @@ class NestedAssets extends AssetBundle{
     ];
     public $js = [
         'js/jquery.mjs.nestedSortable.js',
-        'js/menulist-min.js',
+        'js/menulist.js',
+        'js/menulist-events.js',
 //        'dist/js/foundation.min.js',
 //        'dist/js/foundation.topbar.js',
 //        'dist/js/app.js'
