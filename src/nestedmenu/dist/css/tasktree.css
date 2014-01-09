@@ -9,3 +9,6 @@ ol { margin: 0; padding: 0; padding-left: 30px; list-style-type: none; }
 .sortable li div.btn-group { float: right; padding-bottom: 5px; }
 
 .taskTree { margin: 50px 0; }
+.tasktree .well-sm{ background-color: #0F0808;padding: 0 9px; }
+.tasktree .well-sm h4{ color: #ABC5D4 }
+

@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
             echo Html::beginTag('li',array('class' => $task->level>1?'sub_item':'','id' => 'list_'.$task->id));
             //echo Html::encode($task->name.$task->level.' root:'.$task->isRoot().' leaf:'.$task->isLeaf());
-            echo $this->render('leave',array('model' => $task));
+            echo $this->render('leaf',array('model' => $task));
             $level=$task->level;
         }
 

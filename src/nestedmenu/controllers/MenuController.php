@@ -150,16 +150,15 @@ class MenuController extends Controller
         }
     }
 
-    public function actionCreateleave($root_id){
-//        VarDumper::dump($root_id,10,true);
+    public function actionCreateleaf($root_id){
         $root = $this->findModel($root_id);
         $model = new NestedMenuTree();
-//        VarDumper::dump($root->attributes,10,true);
 
         if($model->load($_POST)){
-            $profile = new NestedMenuProfile();
+            $profile        = new NestedMenuProfile();
             $profile->title = $model->title;
-            $model->title = Sanitizer::getSanitizedUrlValue($model->title);
+            $model->title   = Sanitizer::getSanitizedUrlValue($model->title);
+
             if($model->appendTo($root)){
                 $config = new NestedMenuConfig();
 
@@ -169,15 +168,15 @@ class MenuController extends Controller
                 $uniqueTest = NestedMenuProfile::find()->where(['slug' => $model->title])->one();
 
                 if(!empty($uniqueTest))
-                    $profile->slug = $profile->slug.'-'.uniqid();
+                    $profile->slug  = $profile->slug.'-'.uniqid();
 
                 if($profile->save() && $config->save()){
                     echo json_encode(
                         [
-                            'validate' => $model->validate(),
-                            'model' => $model->attributes,
-                            'root_id' => $root_id,
-                            'redirect' => $this->createUrl('update',array('id' => $root_id))
+                            'validate'  => $model->validate(),
+                            'model'     => $model->attributes,
+                            'root_id'   => $root_id,
+                            'redirect'  => $this->createUrl('update',array('id' => $root_id))
                         ]
                     );
                     return;
@@ -186,9 +185,9 @@ class MenuController extends Controller
             }
 
         }
-        echo $this->renderPartial('_form_create_leave', [
-            'model' => $model,
-            'action' => $this->createAbsoluteUrl('createleave',['root_id' => $root_id])
+        echo $this->renderPartial('_form_create_leaf', [
+            'model'     => $model,
+            'action'    => $this->createAbsoluteUrl('createleaf',['root_id' => $root_id])
         ]);
     }
 
@@ -227,7 +226,7 @@ class MenuController extends Controller
     {
         $view = $this->getView();
         $view->registerJs(
-            'var appendTaskUrl = "'.$this->createAbsoluteUrl('createleave').'"',
+            'var appendTaskUrl = "'.$this->createAbsoluteUrl('createleaf').'"',
             View::POS_HEAD,
             'append-task-url'
         );

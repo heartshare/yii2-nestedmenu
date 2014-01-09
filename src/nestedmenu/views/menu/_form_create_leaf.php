@@ -14,7 +14,7 @@ use nestedmenu\helpers\ActiveFormHelper;
 <div class="nested-menu-form">
 
     <?php $form = ActiveForm::begin([
-        'options' => ['class' => 'form-horizontal','id' => 'form_create_leave'],
+        'options' => ['class' => 'form-horizontal','id' => 'form_create_leaf'],
         'fieldConfig' => [
             'template' => ActiveFormHelper::formHorizontalGroupTemplate('col-lg-10'),
             'labelOptions' => [

@@ -55,7 +55,7 @@
                 'type':'POST'
             })
             .done(function(formBody){
-                self._addFormBody(formBody,'#form_create_leave','Neuen Menüpunkt hinzufügen');
+                self._addFormBody(formBody,'#form_create_leaf','Neuen Menüpunkt hinzufügen');
             })
             .error(function(){
 
