@@ -139,7 +139,7 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-//        VarDumper::dump($model->attributes,10,true);
+        VarDumper::dump($model->attributes,10,true);
         $this->registerJsProfile($model);
         if ($model->load($_POST) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -242,9 +242,19 @@ class MenuController extends Controller
         );
 
         $view->registerJs(
-            'var voProfile = '.json_encode($model->attributes).';',
+            'var model = '.json_encode($model->attributes).';',
+            View::POS_HEAD,
+            'root'
+        );
+        $view->registerJs(
+            'var modelProfile = '.json_encode($model->profile).';',
             View::POS_HEAD,
             'profile'
+        );
+        $view->registerJs(
+            'var modelConfig = '.json_encode($model->config).';',
+            View::POS_HEAD,
+            'config'
         );
 
 //        Yii::app()->clientscript->registerScriptFile($this->module->assetsUrl.'/js/vendor-min.js',CClientScript::POS_END);
