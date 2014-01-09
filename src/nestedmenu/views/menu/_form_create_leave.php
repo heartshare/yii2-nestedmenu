@@ -6,7 +6,7 @@ use nestedmenu\helpers\ActiveFormHelper;
 
 /**
  * @var yii\web\View $this
- * @var common\modules\nestedmenu\models\NestedMenu $model
+ * @var nestedmenu\models\NestedMenu $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

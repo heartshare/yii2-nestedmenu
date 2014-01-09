@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 
 /**
  * @var yii\web\View $this
- * @var common\modules\nestedmenu\models\Menu $model
+ * @var nestedmenu\models\Menu $model
  */
 
 $this->title = $model->title;

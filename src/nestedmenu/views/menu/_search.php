@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var common\modules\nestedmenu\MenuQuery $model
+ * @var nestedmenu\MenuQuery $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

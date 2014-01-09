@@ -8,7 +8,11 @@
     "version": "0.0.3",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "dev-master"
+        "yiisoft/yii2": "dev-master",
+        "yiisoft/yii2-bootstrap": "dev-master",
+        "yiisoft/yii2-jui": "*",
+        "creocoder/nested-set-behavior-2": "dev-master"
+
     },
     "minimum-stability": "dev",
     "authors": [

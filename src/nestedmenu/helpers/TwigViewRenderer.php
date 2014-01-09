@@ -3,7 +3,7 @@
  * User: Pascal Brewing
  * Date: 21.11.13
  * Time: 18:39
- * @package common\modules\nestedmenu\helpers
+ * @package nestedmenu\helpers
  * Class TwigViewRenderer
  */
 namespace nestedmenu\helpers;
@@ -16,7 +16,7 @@ use nestedmenu\ActiveFormHelper;
 
 /**
  * Class TwigViewRenderer
- * @package common\modules\nestedmenu\helpers
+ * @package nestedmenu\helpers
  */
 class TwigViewRenderer extends ViewRenderer {
 

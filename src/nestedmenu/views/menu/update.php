@@ -2,8 +2,8 @@
 use yii\helpers\Html;
 use common\helpers\Glyph;
 use common\helpers\Typo;
-use \common\modules\nestedmenu\assets\NestedAssets;
-use \common\modules\nestedmenu\models\NestedMenuTree;
+use nestedmenu\assets\NestedAssets;
+use nestedmenu\models\NestedMenuTree;
 use yii\bootstrap\modal;
 
 NestedAssets::register($this);

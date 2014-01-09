@@ -1,8 +1,8 @@
 <?php
 use nestedmenu\helpers\Glyph;
 
-//$config = common\modules\nestedmenu\models\NestedMenuConfig::find()->where(['tree_id' => $model->id]);
-//$profile = common\modules\nestedmenu\models\NestedMenuProfile::find()->where(['tree_id' => $model->id]);
+//$config = nestedmenu\models\NestedMenuConfig::find()->where(['tree_id' => $model->id]);
+//$profile = nestedmenu\models\NestedMenuProfile::find()->where(['tree_id' => $model->id]);
 //\yii\helpers\VarDumper::dump($model->config,10,true);
 ?>
 <div class="well well-sm">

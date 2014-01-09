@@ -20,7 +20,7 @@ use yii\web\View;
 /**
  * MenuController implements the CRUD actions for Menu model.
  * Class MenuController
- * @package common\modules\nestedmenu\controllers
+ * @package nestedmenu\controllers
  */
 class MenuController extends Controller
 {

@@ -14,7 +14,7 @@ use yii\helpers\VarDumper;
  * @author: Pascal Brewing < pascalbrewing@googlemail.com >
  * @see http://getbootstrap.com/
  * @since 2.0
- * @package common\modules\nestedmenu\helpers
+ * @package nestedmenu\helpers
  */
 class Typo {
 

@@ -10,7 +10,7 @@ use yii\web\AssetBundle;
  * Time: 13:19
  *
  * Class NestedAssets
- * @package common\modules\nestedmenu\assets
+ * @package nestedmenu\assets
  */
 class NestedAssets extends AssetBundle{
 

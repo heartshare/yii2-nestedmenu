@@ -7,7 +7,7 @@ use yii\helpers\VarDumper;
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var common\modules\nestedmenu\MenuQuery $searchModel
+ * @var nestedmenu\MenuQuery $searchModel
  */
 
 $this->title = 'Menus';
