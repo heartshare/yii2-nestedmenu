@@ -10,7 +10,7 @@ use \yii\helpers\VarDumper;
 <div class="well well-sm">
     <div class="row">
         <div class="col-lg-6">
-            <h4><?= $model->profile->title ?></h4>
+            <h4><?= $model->profile->title.' '.$model->id ?></h4>
         </div>
         <div class="col-lg-6 last">
 
@@ -21,11 +21,9 @@ use \yii\helpers\VarDumper;
                 <button type="button" class="btn btn-info editListItem">
                     <?= Glyph::icon(Glyph::ICON_EDIT) ?>
                 </button>
-                <?php if(!$model->isRoot() && !$model->isLeaf()|| !$model->isRoot()) : ?>
-                    <button type="button" class="btn btn-danger removeFromList">
-                        <?= Glyph::icon(Glyph::ICON_TRASH) ?>
-                    </button>
-                <?php endif; ?>
+                <button type="button" class="btn btn-danger removeFromList <?= !$model->isRoot() && !$model->isLeaf() || !$model->isRoot()?'':'disabled'?>">
+                    <?= Glyph::icon(Glyph::ICON_TRASH) ?>
+                </button>
             </div>
         </div>
     </div>

@@ -173,16 +173,32 @@
                 helper:	'clone',
                 isTree: true,
                 expandOnHover: 700,
-                startCollapsed: false,
+                startCollapsed: true,
                 placeholder: 'placeholder',
                 revert: 250,
                 tabSize: 25,
                 isAllowed: function(placeholder, placeholderParent, originalItem) {
+                    console.log(['placeholder',placeholder]);
+                    console.log(['placeholderParent',placeholderParent]);
+                    console.log(['originalItem',originalItem]);
+//                    console.log($(item).index())
+//                    var test = function(event,item){
+//                        console.log($(this).index());
+//                        $(item).off('mouseleave',test);
+//                    }
+//                    $(item).on('mouseleave',test);
                     return true;
                 }
 
             });
 
+
+
+//            $(this.$list).sortable({
+//                change: function( event, ui ) {
+//                    console.log(['change',event,ui])
+//                }
+//            });
             this._registerEventListener();
         },
         _registerEventListener:function()
@@ -192,24 +208,13 @@
                 .on('append-new-item-to-list',$.proxy(this._getArray,this));
             $(document).on('nestedmenu.dragStop',$.proxy(this._test,this));
         },
-        _test:function(event,currentItem,parentItem,previousItem,nextItem){
-            var self = this;
-//            console.log('next',domPositionNext);
-//            console.log('prev',domPositionPrev);
-//            console.log('hovering',hoveringClass);
-            console.log('current',currentItem);
-            console.log('parent',parentItem);
-            console.log('prev',previousItem);
-            console.log('next',nextItem);
-            console.log('index',currentItem.index());
-//            var newSort = self._getArray();
-//            console.log('newSort',newSort);
-//            console.log('parent',parent);
+        _test:function(event,parentItem,nextItem){
+            console.log(parentItem,$(nextItem).index());
+
         },
         _getArray:function(){
-            var arraied =  this.$list.nestedSortable('toArray');
-            return arraied;
-            //this._update(arraied);
+            var arraied =  this.$list.nestedSortable('toArray', {startDepthCount: 0});
+            this._update(arraied);
         },
         dump:function(arr,level){
             var self = this;
@@ -248,7 +253,7 @@
                 arraied = self.dump(arraied);
                 (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ?$('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
             }).error(function(){
-                console.log(updateTreeUrl,'something missmatch');
+                console.log(updateTreeUrl,'smothing missmatch');
             });
         },
         _appendNewItem:function(event,root_id,model){
@@ -263,12 +268,6 @@
         function () {
             // Initializes the B_Gallery Grid
             SortableList.init()
-            $('.sub_item').on(
-                'webkitAnimationEnd mozAnimationEnd oAnimationEnd animationEnd',
-                function(){
-                    $(this).removeClass('animated bounceInDown');
-                }
-            )
         }
     );
 }(jQuery));

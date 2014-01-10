@@ -257,7 +257,7 @@
             // mjs - to find the previous sibling in the list, keep backtracking until we hit a valid list item.
             var previousItem = this.placeholder[0].previousSibling ? $(this.placeholder[0].previousSibling) : null;
             if (previousItem != null) {
-                while (previousItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
+                while (previousItem[0].nodeName.toLowerCase() != 'li' || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
                     if (previousItem[0].previousSibling) {
                         previousItem = $(previousItem[0].previousSibling);
                     } else {
@@ -270,7 +270,7 @@
             // mjs - to find the next sibling in the list, keep stepping forward until we hit a valid list item.
             var nextItem = this.placeholder[0].nextSibling ? $(this.placeholder[0].nextSibling) : null;
             if (nextItem != null) {
-                while (nextItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
+                while (nextItem[0].nodeName.toLowerCase() != 'li' || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
                     if (nextItem[0].nextSibling) {
                         nextItem = $(nextItem[0].nextSibling);
                     } else {
@@ -292,7 +292,7 @@
                 ) {
 
                 parentItem.after(this.placeholder[0]);
-                if (o.isTree && parentItem.children(o.listItem).children(o.listItem + ':visible:not(.ui-sortable-helper)').length < 1) {
+                if (o.isTree && parentItem.children(o.listItem).children('li:visible:not(.ui-sortable-helper)').length < 1) {
                     parentItem.removeClass(this.options.branchClass + ' ' + this.options.expandedClass)
                         .addClass(this.options.leafClass);
                 }
@@ -323,7 +323,7 @@
                     previousItem.children(o.listType).prepend(this.placeholder);
                 }
                 // mjs - otherwise, add it to the bottom of the list.
-                else if(previousItem.children(o.listType).length) {
+                else {
                     previousItem.children(o.listType)[0].appendChild(this.placeholder[0]);
                 }
 
@@ -372,41 +372,6 @@
             this.mouseentered = false;
             this.hovering && window.clearTimeout(this.hovering);
             this.hovering = null;
-
-            var o = this.options;
-            var parentItem = (this.placeholder[0].parentNode.parentNode &&
-                    $(this.placeholder[0].parentNode.parentNode).closest('.ui-sortable').length)
-                    ? $(this.placeholder[0].parentNode.parentNode)
-                    : null,
-                level = this._getLevel(this.placeholder),
-                childLevels = this._getChildLevels(this.helper);
-            // mjs - to find the previous sibling in the list, keep backtracking until we hit a valid list item.
-            var previousItem = this.placeholder[0].previousSibling ? $(this.placeholder[0].previousSibling) : null;
-            if (previousItem != null) {
-                while (previousItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || previousItem[0] == this.currentItem[0] || previousItem[0] == this.helper[0]) {
-                    if (previousItem[0].previousSibling) {
-                        previousItem = $(previousItem[0].previousSibling);
-                    } else {
-                        previousItem = null;
-                        break;
-                    }
-                }
-            }
-
-            // mjs - to find the next sibling in the list, keep stepping forward until we hit a valid list item.
-            var nextItem = this.placeholder[0].nextSibling ? $(this.placeholder[0].nextSibling) : null;
-            if (nextItem != null) {
-                while (nextItem[0].nodeName.toLowerCase() != $(o.listType)[0].nodeName.toLowerCase() || nextItem[0] == this.currentItem[0] || nextItem[0] == this.helper[0]) {
-                    if (nextItem[0].nextSibling) {
-                        nextItem = $(nextItem[0].nextSibling);
-                    } else {
-                        nextItem = null;
-                        break;
-                    }
-                }
-            }
-            $(document).trigger('nestedmenu.dragStop',[this.currentItem,parentItem,previousItem,nextItem]);
-
 
             $.ui.sortable.prototype._mouseStop.apply(this, arguments);
 

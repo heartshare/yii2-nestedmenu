@@ -16,12 +16,13 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="menu-update">
 
-<?= Typo::pageHeader($this->title,$model->title) ?>
+    <?= Typo::pageHeader($this->title, $model->title) ?>
 
-<!--	--><?php //echo $this->render('_form', [
-//		'model' => $model,
-//	]); ?>
-<?= Html::button(Glyph::icon(Glyph::ICON_PLUS_SIGN),['class' => 'appendToList btn btn-success','data-id' => $model->id]) ?>
+    <!--	--><?php //echo $this->render('_form', [
+    //		'model' => $model,
+    //	]);
+    ?>
+    <?= Html::button(Glyph::icon(Glyph::ICON_PLUS_SIGN), ['class' => 'appendToList btn btn-success', 'data-id' => $model->id]) ?>
     <?php
     /**
      * @package pb_menu\views
@@ -29,79 +30,61 @@ $this->params['breadcrumbs'][] = 'Update';
     ?>
     <div class="taskTree">
         <?php
-        $level=0;
-        echo Html::beginTag('ol',array('class' => 'sortable'));
-        $categories = NestedMenuTree::find()->where(['root' => $model->id])->addOrderBy('lft')->all();
         $level = 0;
-//        //CVarDumper::dump($tasks,100,true);
-//        foreach ($categories as $n => $category)
-//        {
-//            if ($category->level == $level) {
-//                echo Html::endTag('li') . "\n";
-//            } elseif ($category->level > $level) {
-//                echo Html::beginTag('ul') . "\n";
-//            } else {
-//                echo Html::endTag('li') . "\n";
-//
-//                for ($i = $level - $category->level; $i; $i--) {
-//                    echo Html::endTag('ul') . "\n";
-//                    echo Html::endTag('li') . "\n";
-//                }
-//            }
-//
-//            echo Html::beginTag('li');
-//            echo Html::encode($category->title);
-//            $level = $category->level;
-//        }
-//
-//        for ($i = $level; $i; $i--) {
-//            echo Html::endTag('li') . "\n";
-//            echo Html::endTag('ul') . "\n";
-//        }
-        foreach($categories as $n=>$task)
-        {
+        echo Html::beginTag('ol', array('class' => 'sortable'));
+        $tree = NestedMenuTree::find()->where(['root' => $model->id])->addOrderBy('lft')->all();
+        $level = 0;
+        foreach ($tree as $n => $task) {
 //            \yii\helpers\VarDumper::dump($task->children()->all(),10,true);
 //            if($task->children()->all())
-            if($task->level==$level){
+            if ($task->level == $level) {
                 echo Html::endTag('li');
-            }else if($task->level>$level ){
-                if($task->level != 1)
+            } else if ($task->level > $level) {
+                if ($task->level != 1)
                     echo Html::beginTag('ol');
-            }else {
+            } else {
                 echo Html::endTag('li');
 
-                for($i=$level-$task->level;$i;$i--)
-                {
+                for ($i = $level - $task->level; $i; $i--) {
                     echo Html::endTag('ol');
                     echo Html::endTag('li');
                 }
             }
 
-            echo Html::beginTag('li',array('class' => $task->level>1?'sub_item':'','id' => 'list_'.$task->id));
+            $parent = $task->parent()->one();
+            $prev = $task->prev()->one();
+            $next = $task->next()->one();
+
+            echo Html::beginTag(
+                'li',
+                [
+                    'class' => $task->level > 1 ? 'sub_item bounceInDown animated' : '',
+                    'id' => 'list_' . $task->id,
+                    'data-asset-id' => $task->id,
+                    'data-next' => isset($next->id) ? $next->id : false,
+                    'data-prev' => isset($prev->id) ? $prev->id : false,
+                    "data-parent" => isset($parent->id) ? $parent->id : false
+                ]
+            );
             //echo Html::encode($task->name.$task->level.' root:'.$task->isRoot().' leaf:'.$task->isLeaf());
-            echo $this->render('leaf',array('model' => $task));
-            $level=$task->level;
+            echo $this->render('leaf', array('model' => $task));
+            $level = $task->level;
         }
 
-        for($i=$level;$i;$i--)
-        {
+        for ($i = $level; $i; $i--) {
             echo Html::endTag('li');
-            if($task->level != 1)
+            if ($task->level != 1)
                 echo Html::endTag('ol');
         }
         echo Html::endTag('ol');
         ?>
     </div>
     <?php
-        Modal::begin([
-          'header' => '<h2>Hello world</h2>',
-          'toggleButton' => ['label' => 'click me','class' => 'btn btn-primary'],
-            'id' => 'nested_menu_modal'
-      ]);
-
-
-
-
-        Modal::end();
+    Modal::begin([
+        'header' => '<h2>Hello world</h2>',
+        'toggleButton' => ['label' => 'click me', 'class' => 'btn btn-primary'],
+        'id' => 'nested_menu_modal'
+    ]);
+    Modal::end();
     ?>
 </div>

@@ -13,3 +13,9 @@ ol { margin: 0; padding: 0; padding-left: 30px; list-style-type: none; }
 .taskTree .well-sm .last{padding-right:0 !important;}
 .taskTree .well-sm h4{ color: #ABC5D4 !important;margin:5px 0 0 0 !important; }
 
+.sub_item{
+    -vendor-animation-duration: 3s;
+    -vendor-animation-delay: 2s;
+    -vendor-animation-iteration-count: infinite;
+}
+
