@@ -166,7 +166,7 @@
         $list:'',
         init: function () {
             this.$list = $('ol.sortable');
-            $(this.$list).nestedSortable({
+            var promise = $(this.$list).nestedSortable({
                 handle: 'div',
                 items: 'li',
                 toleranceElement: '> div',
@@ -176,13 +176,27 @@
                 startCollapsed: true,
                 placeholder: 'placeholder',
                 revert: 250,
-                tabSize: 25
-            });
-            $(this.$list).sortable({
-                change: function( event, ui ) {
-                    console.log(['change',event,ui])
+                tabSize: 25,
+                isAllowed: function(item, parent) {
+//                    console.log(item,parent);
+                    console.log($(item).index())
+                    var test = function(event,item){
+                        console.log($(this).index());
+                        $(item).off('mouseleave',test);
+                    }
+                    $(item).on('mouseleave',test);
+                    return true;
                 }
+
             });
+
+
+
+//            $(this.$list).sortable({
+//                change: function( event, ui ) {
+//                    console.log(['change',event,ui])
+//                }
+//            });
             this._registerEventListener();
         },
         _registerEventListener:function()
@@ -190,6 +204,11 @@
             $(document)
                 .on('task-save',$.proxy(this._getArray,this))
                 .on('append-new-item-to-list',$.proxy(this._getArray,this));
+            $(document).on('nestedmenu.dragStop',$.proxy(this._test,this));
+        },
+        _test:function(event,parentItem,nextItem){
+            console.log(parentItem,$(nextItem).index());
+
         },
         _getArray:function(){
             var arraied =  this.$list.nestedSortable('toArray', {startDepthCount: 0});
