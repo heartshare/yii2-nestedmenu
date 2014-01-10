@@ -178,6 +178,11 @@
                 revert: 250,
                 tabSize: 25
             });
+            $(this.$list).sortable({
+                change: function( event, ui ) {
+                    console.log(['change',event,ui])
+                }
+            });
             this._registerEventListener();
         },
         _registerEventListener:function()

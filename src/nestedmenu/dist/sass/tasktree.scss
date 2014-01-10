@@ -52,4 +52,13 @@ ol {
 
 .taskTree{
   margin: 50px 0;
+  .well-sm{
+    background-color: #0F0808;padding: 0 9px;
+    h4{
+      color: #ABC5D4;margin:5px 0 0 0;
+    }
+    &:last-child{
+      padding-right:0;
+    }
+  }
 }

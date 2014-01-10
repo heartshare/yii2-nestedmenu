@@ -12,7 +12,7 @@ use \yii\helpers\VarDumper;
         <div class="col-lg-6">
             <h4><?= $model->profile->title ?></h4>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 last">
 
             <div class="btn-group pull-right text-right">
                 <button data-id="<?= $model->id ?>" type="button" class="btn btn-success appendToList">
