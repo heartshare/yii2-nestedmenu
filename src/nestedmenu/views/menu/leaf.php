@@ -24,7 +24,29 @@ use \yii\helpers\VarDumper;
                 <button type="button" class="btn btn-danger removeFromList <?= !$model->isRoot() && !$model->isLeaf() || !$model->isRoot()?'':'disabled'?>">
                     <?= Glyph::icon(Glyph::ICON_TRASH) ?>
                 </button>
+                <?php $children = $model->children()->one(); ?>
+                <button type="button" class="btn btn-info disclose <?= !empty($children)?'':'disabled'?>">
+                    <?= Glyph::icon(Glyph::ICON_RESIZE_FULL) ?>
+                </button>
             </div>
         </div>
     </div>
 </div>
+<style type="text/css">
+
+    .sortable li.mjs-nestedSortable-collapsed > ol {
+        display: none;
+    }
+
+    .sortable li.mjs-nestedSortable-branch > div > .disclose {
+        display: inline-block;
+    }
+
+    .sortable li.mjs-nestedSortable-collapsed > div > .disclose > span:before {
+        content: '+ ';
+    }
+
+    .sortable li.mjs-nestedSortable-expanded > div > .disclose > span:before {
+        content: '- ';
+    }
+</style>
