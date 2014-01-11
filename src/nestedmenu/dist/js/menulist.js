@@ -168,15 +168,27 @@
         $updateArray: null,
         $changeItem: null,
         $updateItem: null,
-        $inserType:null,
+        $inserType: null,
+        $csrf_token:'',
+        $csrf_param:'',
         /**
          * Start
          */
         init: function () {
             var self = this;
-            self.$list = $('ol.sortable');
-            self._setNestedSortable();
-            self._registerEventListener();
+                self._getCsrf();
+                self.$list = $('ol#taskTree1');
+                self._setNestedSortable();
+                self._registerEventListener();
+        },
+        /**
+         * reda the token forom the header
+         * @private
+         */
+        _getCsrf: function () {
+            var self = this;
+                self.$csrf_token = $('meta[name=csrf-token]').attr('content');
+                self.$csrf_param = $('meta[name=csrf-var]').attr('content');
         },
         /**
          * append the nestedSortable to the $list
@@ -185,42 +197,61 @@
          */
         _setNestedSortable: function () {
             var self = this;
-                /**
-                 * plz use https://github.com/FinalAngel/nestedSortable
-                 * it be fixed ui 1.10
-                 */
-                self.$list.nestedSortable({
-                    forcePlaceholderSize: true,
-                    handle: 'div',
-                    helper:	'clone',
-                    items: 'li',
-                    opacity: .6,
-                    placeholder: 'placeholder',
-                    revert: 250,
-                    tabSize: 25,
-                    protectRoot:true,
-                    tolerance: 'pointer',
-                    toleranceElement: '> div',
-                    maxLevels: 120,
+            /**
+             * plz use https://github.com/FinalAngel/nestedSortable
+             * it be fixed ui 1.10
+             */
+            self.$list.nestedSortable({
+                forcePlaceholderSize: true,
+                handle: 'div',
+                helper: 'clone',
+                items: 'li',
+                opacity: .6,
+                placeholder: 'placeholder',
+                revert: 250,
+                tabSize: 25,
+                protectRoot: true,
+                tolerance: 'pointer',
+                toleranceElement: '> div',
+                maxLevels: 120,
+                connectWith: ".sortable",
+                isTree: true,
+                expandOnHover: 200,
+                startCollapsed: true,
+                update: function (event, ui) {
+                    var list = $(this).nestedSortable('toArray', {startDepthCount: 0});
+                    /**
+                     * We trigger the nestedSortable update event
+                     */
+                    $(document).trigger('nestedmenu.updated', [ui, list])
+                },
+                change: function (event, ui) {
+                    /**
+                     * we trigger the nestedSortable Event
+                     */
+                    $(document).trigger('nestedmenu.change', [ui])
+                }
+            }).disableSelection();
 
-                    isTree: true,
-                    expandOnHover: 700,
-                    startCollapsed: true,
-                    update: function (event, ui) {
-                        var list = $(this).nestedSortable('toArray', {startDepthCount: 0});
-                        /**
-                         * We trigger the nestedSortable update event
-                         */
-                        $(document).trigger('nestedmenu.updated', [ui, list])
-                    },
-                    change: function (event, ui) {
-                        /**
-                         * we trigger the nestedSortable Event
-                         */
-                        $(document).trigger('nestedmenu.change', [ui])
-                    }
-                });
-                self.$startArray = self.$list.nestedSortable('toArray', {startDepthCount: 0})
+//            $('ol#taskTree2').nestedSortable({
+//                forcePlaceholderSize: true,
+//                handle: 'div',
+//                helper: 'clone',
+//                items: 'li',
+//                opacity: .6,
+//                placeholder: 'placeholder',
+//                revert: 250,
+//                tabSize: 25,
+//                protectRoot: true,
+//                tolerance: 'pointer',
+//                toleranceElement: '> div',
+//                maxLevels: 120,
+//                connectWith: ".sortable",
+//                isTree: true,
+//                expandOnHover: 200,
+//                startCollapsed: true,
+//            }).disableSelection();
+            self.$startArray = self.$list.nestedSortable('toArray', {startDepthCount: 0})
         },
 
         /**
@@ -235,7 +266,7 @@
             self.$activeItemId = $(ui.item).data('asset-id');
             self._returnItemByID(self.$startArray, self.$activeItemId, 'change');
 
-//            console.log('SortTree->_changeLeaf()->changeItem',self.$changeItem);
+            console.log('SortTree->_changeLeaf()->changeItem',self.$changeItem);
         },
 
         /**
@@ -249,11 +280,13 @@
             var self = this;
             self.$updateArray = list;
             self._returnItemByID(self.$updateArray, self.$activeItemId, 'update');
-            self._moveUpdateType();
 
+            var result = self._moveUpdateType();
+            self._move(result);
 
-//            console.log('SortTree->_updateLeaf()->id', self.$activeItemId);
-//            console.log('SortTree->_updateLeaf()->updateItem', self.$updateItem);
+            console.log('SortTree->_updateLeaf()->result', result);
+            console.log('SortTree->_updateLeaf()->id', self.$activeItemId);
+            console.log('SortTree->_updateLeaf()->updateItem', self.$updateItem);
         },
 
         /**
@@ -298,8 +331,9 @@
                 .on('nestedmenu.change', $.proxy(self._changeLeaf, this))
                 .on('nestedmenu.updated', $.proxy(self._updateLeaf, this));
 
-            $('.disclose').on('click', function() {
+            $('.disclose').on('click', function () {
                 $(this).closest('li').toggleClass('mjs-nestedSortable-collapsed').toggleClass('mjs-nestedSortable-expanded');
+                $(this).children('span').toggleClass('glyphicon-resize-full').toggleClass('glyphicon-resize-small');
             })
         },
 
@@ -363,18 +397,27 @@
          * }
          * @private
          */
-        _moveUpdateType:function(){
+        _moveUpdateType: function () {
             var self = this,
                 leaf = self.$updateItem.leaf,
                 prev = self.$updateItem.prev,
                 next = self.$updateItem.next;
 
-            console.log('SortTree->_createInsertType()->prev',prev);
-            console.log('SortTree->_createInsertType()->next',next);
-            console.log('SortTree->_createInsertType()->leaf',leaf);
-            console.log('moveAfter : '+prev.item_id,prev.parent_id === leaf.parent_id);
-            console.log('moveAsFirst : '+leaf.parent_id,prev.parent_id === null && next.parent_id !== leaf.parent_id || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id);
-            console.log('moveAsLast : '+leaf.parent_id,prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id );
+            console.log('SortTree->_createInsertType()->prev', prev);
+            console.log('SortTree->_createInsertType()->next', next);
+            console.log('SortTree->_createInsertType()->leaf', leaf);
+            console.log('moveAfter : ' + prev.item_id, prev.parent_id === leaf.parent_id);
+            if(prev.parent_id === leaf.parent_id){
+                return {
+                    moveType:'moveAfter',
+                    leafId:leaf.item_id,
+                    to:prev.item_id
+                };
+            }
+            console.log('moveAsFirst : ' + leaf.parent_id, prev.parent_id === null && next.parent_id !== leaf.parent_id || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id);
+            console.log('moveAsLast : ' + leaf.parent_id, prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id);
+
+
         },
         /**
          * https://github.com/creocoder/yii2-nested-set-behavior#adding-child-nodes
@@ -385,34 +428,52 @@
          * We get out which type we need
          * @private
          */
-        _createInsertType:function(){
+        _createInsertType: function () {
             var self = this,
                 leaf = self.$updateItem.leaf,
                 prev = self.$updateItem.prev,
                 next = self.$updateItem.next;
 
-            console.log('SortTree->_createInsertType()->prev',prev);
-            console.log('SortTree->_createInsertType()->next',next);
-            console.log('SortTree->_createInsertType()->leaf',leaf);
-            console.log('insertAfter : '+prev.item_id,prev.parent_id === leaf.parent_id);
-            console.log('prependTo : '+prev.item_id,prev.parent_id !== leaf.parent_id );
+            console.log('SortTree->_createInsertType()->prev', prev);
+            console.log('SortTree->_createInsertType()->next', next);
+            console.log('SortTree->_createInsertType()->leaf', leaf);
+            console.log('insertAfter : ' + prev.item_id, prev.parent_id === leaf.parent_id);
+            console.log('prependTo : ' + prev.item_id, prev.parent_id !== leaf.parent_id);
 //            console.log('prependTo : ',prev.parent_id !== leaf.parent_id );
 
         },
-        _update: function (arr) {
-            var main = {sorted_list: arr};
-            var self = this;
-            $.ajax({
-                'url': updateListSortingUrl,
-                'type': 'POST',
-                'data': main,
-                'dataType': 'json'
-            }).done(function (arraied) {
-                    arraied = self.dump(arraied);
-                    (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ? $('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
-                }).error(function () {
-                    console.log(updateTreeUrl, 'something missmatch');
+        /**
+         *
+         * @param arr
+         * @private
+         */
+        _move: function (arr) {
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': "Basic"
+                },
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", self.$csrf_token);
+                }
+            });
+            var main = {MoveList: arr},
+                self = this,
+                promise = $.ajax({
+                    'url': moveLeaf,
+                    'type': 'POST',
+                    'data': main
+//                    ,
+//                    'dataType': 'json'
                 });
+
+            promise.done(function (response) {
+                console.log('SortTree->update()->respoonse : ',response);
+//                arraied = self.dump(arraied);
+//                (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ? $('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
+            })
+            promise.error(function () {
+                console.log(moveLeaf, 'something missmatch');
+            });
         },
         _appendNewItem: function (event, root_id, model) {
 

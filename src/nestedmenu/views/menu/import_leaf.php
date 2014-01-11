@@ -26,7 +26,7 @@ $children = $model->children()->one();
                     class="btn btn-warning appendToList"
                     data-toggle="tooltip"
                     data-title="Create a new leaf after this"
-                >
+                    >
                     <?= Glyph::icon(Glyph::ICON_PLUS_SIGN) ?>
                 </button>
                 <button
@@ -34,7 +34,7 @@ $children = $model->children()->one();
                     class="btn btn-success editListItem"
                     data-toggle="tooltip"
                     data-title="Update"
-                >
+                    >
                     <?= Glyph::icon(Glyph::ICON_EDIT) ?>
                 </button>
                 <button
@@ -43,7 +43,7 @@ $children = $model->children()->one();
                     data-toggle="tooltip"
                     data-title="delete"
                     confirm="Sure you want delete this Tree ?"
-                >
+                    >
                     <?= Glyph::icon(Glyph::ICON_TRASH) ?>
                 </button>
                 <button
@@ -51,7 +51,7 @@ $children = $model->children()->one();
                     class="btn btn-primary disclose <?= !empty($children)?'':'disabled'?>"
                     data-toggle="tooltip"
                     data-title="Open"
-                >
+                    >
                     <?= Glyph::icon(Glyph::ICON_RESIZE_FULL) ?>
                 </button>
                 <button
@@ -60,7 +60,7 @@ $children = $model->children()->one();
                     data-title="Atributes"
                     class="btn btn-info info"
                     id="open_submenu_<?= $model->id ?>"
-                >
+                    >
                     <?= Glyph::icon(Glyph::ICON_INFO_SIGN) ?>
                 </button>
             </div>
@@ -81,21 +81,3 @@ $this->registerJs(
     "open_submenu_{$model->id}"
 );
 ?>
-<style type="text/css">
-
-    .sortable li.mjs-nestedSortable-collapsed > ol {
-        display: none;
-    }
-
-    .sortable li.mjs-nestedSortable-branch > div > .disclose {
-        display: inline-block;
-    }
-
-    .sortable li.mjs-nestedSortable-collapsed > div > .disclose > span:before {
-        content: '+ ';
-    }
-
-    .sortable li.mjs-nestedSortable-expanded > div > .disclose > span:before {
-        content: '- ';
-    }
-</style>

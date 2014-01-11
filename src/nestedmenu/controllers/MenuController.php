@@ -32,7 +32,8 @@ class MenuController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'createLeave' => ['post']
+                    'createleaf' => ['post'],
+//                    'moveleaf' => ['post']
                 ],
             ],
 //            'access' => [
@@ -192,6 +193,25 @@ class MenuController extends Controller
     }
 
     /**
+     * Update t
+     */
+    public function actionMoveleaf(){
+
+//        echo VarDumper::dump($_POST,10,true);
+        $data = $_POST['MoveList'];
+        if( isset($data['leafId']) && isset($data['to']) && isset($data['moveType']) ){
+            $root = NestedMenuTree::find($data['to']);
+            $model = NestedMenuTree::find($data['leafId']);
+            if($model->$data['moveType']($root)){
+                echo VarDumper::dump($model->attributes,10,true);
+            }else{
+                echo 'no';
+            };
+            return;
+        }
+    }
+
+    /**
      * Deletes an existing Menu model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -226,12 +246,22 @@ class MenuController extends Controller
     {
         $view = $this->getView();
         $view->registerJs(
+            "$('[data-toggle=\"popover\"]').popover();".PHP_EOL,
+            View::POS_READY,
+            'popover'
+        );
+        $view->registerJs(
+            "$('[data-toggle=\"tooltip\"]').tooltip();".PHP_EOL,
+            View::POS_READY,
+            'tooltip'
+        );
+        $view->registerJs(
             'var appendTaskUrl = "'.$this->createAbsoluteUrl('createleaf').'"',
             View::POS_HEAD,
             'append-task-url'
         );
         $view->registerJs(
-            'var updateListSortingUrl = "'.$this->createUrl('updateListSorting').'"',
+            'var moveLeaf = "'.$this->createUrl('moveleaf').'"',
             View::POS_HEAD,
             'update-list-sorting'
         );
