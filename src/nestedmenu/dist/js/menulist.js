@@ -311,7 +311,7 @@
                     var response = {
                         prev: tree[index - 1],
                         leaf: leaf,
-                        next: tree[index + 1]
+                        next: tree[index + 1] !== undefined?tree[index+1]:false
                     };
 //                    console.log('SortTree->_returnItemByID()->'+attr,response);
                     return attr === 'change' ? self.$changeItem = response : self.$updateItem = response;
@@ -406,16 +406,36 @@
             console.log('SortTree->_createInsertType()->prev', prev);
             console.log('SortTree->_createInsertType()->next', next);
             console.log('SortTree->_createInsertType()->leaf', leaf);
-            console.log('moveAfter : ' + prev.item_id, prev.parent_id === leaf.parent_id);
+
             if(prev.parent_id === leaf.parent_id){
+                console.log('moveAfter : ' + prev.item_id);
                 return {
                     moveType:'moveAfter',
                     leafId:leaf.item_id,
                     to:prev.item_id
                 };
             }
-            console.log('moveAsFirst : ' + leaf.parent_id, prev.parent_id === null && next.parent_id !== leaf.parent_id || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id);
-            console.log('moveAsLast : ' + leaf.parent_id, prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id);
+
+            if(
+                prev.parent_id === null && next.parent_id !== leaf.parent_id
+                || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id
+            ){
+                console.log('moveAsFirst : ' + leaf.parent_id);
+                return {
+                    moveType:'moveAsFirst',
+                    leafId:leaf.item_id,
+                    to:prev.item_id
+                };
+            }
+
+            if(prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id){
+                console.log('moveAsLast : ' + leaf.parent_id);
+                return {
+                    moveType:'moveAsLast',
+                    leafId:leaf.item_id,
+                    to:prev.item_id
+                };
+            }
 
 
         },

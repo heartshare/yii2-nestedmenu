@@ -46,5 +46,11 @@ class NestedAssets extends AssetBundle{
         'yii\jui\SortableAsset',
         'frontend\assets\AppAsset'
     ];
+    /**
+     * @var array
+     */
+    public $publishOptions = [
+      'forceCopy' => true
+    ];
 
 } 
