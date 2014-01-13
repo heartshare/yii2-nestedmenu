@@ -15,6 +15,4 @@ $(function(){
         console.log(this);
         $(document).trigger('update-list-item',[$(this).data('id')]);
     });
-
-
 });

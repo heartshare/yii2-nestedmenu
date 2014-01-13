@@ -30,6 +30,7 @@ $children = $model->children()->one();
                     <?= Glyph::icon(Glyph::ICON_PLUS_SIGN) ?>
                 </button>
                 <button
+                    data-id="<?= $model->id ?>"
                     type="button"
                     class="btn btn-success editListItem"
                     data-toggle="tooltip"

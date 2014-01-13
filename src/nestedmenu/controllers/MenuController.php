@@ -11,6 +11,7 @@ use nestedmenu\models\NestedMenuConfig;
 use nestedmenu\models\NestedMenuTree;
 use nestedmenu\models\NestedMenuQuery;
 
+use yii\helpers\Json;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,7 +34,8 @@ class MenuController extends Controller
                 'actions' => [
                     'delete' => ['post'],
                     'createleaf' => ['post'],
-//                    'moveleaf' => ['post']
+                    'moveleaf' => ['post'],
+                    'updateleaf' => ['post']
                 ],
             ],
 //            'access' => [
@@ -172,12 +174,11 @@ class MenuController extends Controller
                     $profile->slug  = $profile->slug.'-'.uniqid();
 
                 if($profile->save() && $config->save()){
-                    echo json_encode(
+                    echo Json::encode(
                         [
                             'validate'  => $model->validate(),
                             'model'     => $model->attributes,
-                            'root_id'   => $root_id,
-                            'redirect'  => $this->createUrl('update',array('id' => $root_id))
+                            'root_id'   => $root_id
                         ]
                     );
                     return;
@@ -192,6 +193,9 @@ class MenuController extends Controller
         ]);
     }
 
+    public function actionUpdateleaf(){
+        echo VarDumper::dump($_POST,10,true);
+    }
     /**
      * Update t
      */
@@ -266,9 +270,9 @@ class MenuController extends Controller
             'update-list-sorting'
         );
         $view->registerJs(
-            'var updateTreeUrl = "'.$this->createUrl('updateListItem').'"',
+            'var updateleaf = "'.$this->createAbsoluteUrl('updateleaf').'"',
             View::POS_HEAD,
-            'update-list'
+            'update-leaf'
         );
 
         $view->registerJs(

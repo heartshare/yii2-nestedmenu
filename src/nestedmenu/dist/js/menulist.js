@@ -23,27 +23,37 @@
                 .on('create-list-item', $.proxy(this._getForm, this))
                 .on('update-list-item', $.proxy(this._getEditForm, this));
         },
+        /**
+         * update a leaf from a tree
+         * @param event
+         * @param modelId
+         * @private
+         */
         _getEditForm: function (event, modelId) {
-            var updateUrl = updateTreeUrl + '/id/' + modelId,
-                self = this;
-            $.ajaxSetup({
-                headers: {
-                    'Authorization': "Basic"
-                },
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", self.$csrf_token);
-                }
-            });
-            $.ajax({
-                'url': updateUrl,
-                'type': 'POST'
-            })
-                .done(function (formBody) {
+            console.log('FormController->getEditForm()->modelId',modelId);
+            var self = this,
+                promise = $.ajaxSetup({
+                    headers: {
+                        'Authorization': "Basic"
+                    },
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", self.$csrf_token);
+                    }
+                });
+                promise = $.ajax({
+                    'url': updateleaf,
+                    'type': 'POST',
+                    'data':{id:modelId}
+                })
+
+                promise.done(function (formBody) {
                     self._addFormBody(formBody, '#menu-list-config-_form_edit_list-form', 'Config bearbeiten');
                 })
-                .error(function () {
-                    console.error(updateUrl + ' missmatch!')
+
+                promise.error(function () {
+                    console.error(updateleaf + ' missmatch!')
                 });
+
 
         },
         _getForm: function (event, root_id) {
