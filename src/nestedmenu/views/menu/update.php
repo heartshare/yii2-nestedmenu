@@ -79,6 +79,7 @@ $this->params['breadcrumbs'][] = 'Update';
         </div>
         <div class="col-lg-6 configure connect">
         </div>
+        <div class="clearfix"></div>
     </div>
 
     <?php

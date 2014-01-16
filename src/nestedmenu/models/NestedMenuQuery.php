@@ -52,7 +52,7 @@ class NestedMenuQuery extends Model
 
 	public function search($params)
 	{
-		$query = NestedMenuTree::find();
+		$query = NestedMenuTree::find()->where(['level' => 1]);
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
 		]);
@@ -66,6 +66,7 @@ class NestedMenuQuery extends Model
 		$this->addCondition($query, 'lft');
 		$this->addCondition($query, 'rgt');
 		$this->addCondition($query, 'level');
+
 
 		return $dataProvider;
 	}
