@@ -17,7 +17,11 @@ ol { margin: 0; padding: 0; padding-left: 15px; list-style-type: none; }
 }
 .taskTree .well-sm .popover{ max-width: 400px; }
 .taskTree .well-sm .config{ border-top:1px solid #ABC5D4; }
-.taskTree .well-sm{  background-color: #123 !important;padding: 0 9px !important; }
+.taskTree .well-sm{
+    padding: 0 9px !important;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+}
 .taskTree .well-sm .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle),
 .taskTree .well-sm .btn-group > .btn:last-child:not(:first-child):not(.dropdown-toggle) {
     border-top-right-radius: 0;
@@ -28,14 +32,16 @@ ol { margin: 0; padding: 0; padding-left: 15px; list-style-type: none; }
 .taskTree .well-sm .last{
     padding-right:5px !important;
 }
-.taskTree .well-sm h4{ color: #ABC5D4 !important;font-size:12px;font-weight:normal;margin:5px 0 0 0 !important; }
+.taskTree .well-sm h4{ font-size:12px;font-weight:normal;margin:5px 0 0 0 !important; }
 
 .sub_item{
     -vendor-animation-duration: 3s;
     -vendor-animation-delay: 2s;
     -vendor-animation-iteration-count: infinite;
 }
-
+.config .label{
+    color: #000;
+}
 .leaf .glyphicon{
     font-size: 12px;
 }

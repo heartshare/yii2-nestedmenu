@@ -193,11 +193,44 @@ class MenuController extends Controller
         ]);
     }
 
+    /**
+     * update a leaf by Id
+     * the config and the profile would be updated
+     */
     public function actionUpdateleaf(){
+        $model = NestedMenuTree::find($_POST['id']);
+
+        echo $this->renderPartial('_form_update_leaf',['model' => $model]);
         echo VarDumper::dump($_POST,10,true);
     }
     /**
-     * Update t
+     * Move the leaf to the dragged position
+     * // move phones to the proper place
+     * $x100 = Category::find(10);
+     * $c200 = Category::find(9);
+     * $samsung = Category::find(7);
+     * $x100->moveAsFirst($samsung);
+     * $c200->moveBefore($x100);
+     *
+     * // now move all Samsung phones branch
+     * $mobile_phones = Category::find(1);
+     * $samsung->moveAsFirst($mobile_phones);
+     *
+     * // move the rest of phone models
+     * $iphone = Category::find(6);
+     * $iphone->moveAsFirst($mobile_phones);
+     * $motorola = Category::find(8);
+     * $motorola->moveAfter($samsung);
+     *
+     * // move car models to appropriate place
+     * $cars = Category::find(2);
+     * $audi = Category::find(3);
+     * $ford = Category::find(4);
+     * $mercedes = Category::find(5);
+     *
+     * foreach(array($audi, $ford, $mercedes) as $category) {
+     *  $category->moveAsLast($cars);
+     * }
      */
     public function actionMoveleaf(){
 
