@@ -20,7 +20,7 @@
         },
         _registerEventListener: function () {
             $(document)
-                .on('create-list-item', $.proxy(this._getForm, this))
+                .on('create-list-item', $.proxy(this._appendLeaf, this))
                 .on('update-list-item', $.proxy(this._getEditForm, this));
         },
         _getEditForm: function (event, modelId) {
@@ -46,7 +46,7 @@
                 });
 
         },
-        _getForm: function (event, root_id) {
+        _appendLeaf: function (event, root_id) {
             this.$root_id = root_id;
 
             var self = this;

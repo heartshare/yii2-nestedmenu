@@ -156,6 +156,7 @@ class MenuController extends Controller
     public function actionCreateleaf($root_id){
         $root = $this->findModel($root_id);
         $model = new NestedMenuTree();
+        $model->setScenario('create');
 
         if($model->load($_POST)){
             $profile        = new NestedMenuProfile();
@@ -183,9 +184,7 @@ class MenuController extends Controller
                     );
                     return;
                 }
-
             }
-
         }
         echo $this->renderPartial('_form_create_leaf', [
             'model'     => $model,
@@ -197,10 +196,23 @@ class MenuController extends Controller
      * update a leaf by Id
      * the config and the profile would be updated
      */
-    public function actionUpdateleaf(){
-        $model = NestedMenuTree::find($_POST['id']);
+    public function actionUpdateleaf($id){
+        $model = NestedMenuTree::find($id);
 
-        echo $this->renderPartial('_form_update_leaf',['model' => $model]);
+        if($model->load($_POST) && $model->config->load($_POST) && $model->profile->load($_POST)){
+            echo VarDumper::dump($_POST,10,true);
+            echo VarDumper::dump($model->attributes,10,true);
+            echo VarDumper::dump($model->config->attributes,10,true);
+            echo VarDumper::dump($model->profile->attributes,10,true);
+            exit;
+        }
+        echo $this->renderPartial(
+            '_form_update_leaf',
+            [
+                'model' => $model,
+                'action' => $this->createAbsoluteUrl('updateleaf',['id' => $model->id])
+            ]
+        );
         echo VarDumper::dump($_POST,10,true);
     }
     /**
@@ -303,7 +315,7 @@ class MenuController extends Controller
             'update-list-sorting'
         );
         $view->registerJs(
-            'var updateleaf = "'.$this->createAbsoluteUrl('updateleaf').'"',
+            'var updateleaf = "'.$this->createAbsoluteUrl('updateleaf',['id' => $model->id]).'"',
             View::POS_HEAD,
             'update-leaf'
         );

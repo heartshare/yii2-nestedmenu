@@ -33,7 +33,8 @@ class NestedMenuTree extends \yii\db\ActiveRecord
 	{
 		return [
 			[['root', 'lft', 'rgt', 'level'], 'integer'],
-			[['title'], 'string', 'max' => 255]
+			[['title'], 'string', 'max' => 255],
+			[['title'], 'required', 'on' => 'create']
 		];
 	}
 

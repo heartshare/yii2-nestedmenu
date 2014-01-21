@@ -40,18 +40,20 @@ $children = $model->children()->one();
                 </button>
                 <button
                     type="button"
-                    class="btn btn-danger removeFromList <?= !$model->isRoot() && !$model->isLeaf() || !$model->isRoot()?'':'disabled'?>"
+                    class="btn btn-danger removeFromList"
                     data-toggle="tooltip"
                     data-title="delete"
                     confirm="Sure you want delete this Tree ?"
+                    <?= !$model->isRoot() && !$model->isLeaf() || !$model->isRoot()?'':'disabled="disabled"'?>
                 >
                     <?= Glyph::icon(Glyph::ICON_TRASH) ?>
                 </button>
                 <button
                     type="button"
-                    class="btn btn-primary disclose <?= !empty($children)?'':'disabled'?>"
+                    class="btn btn-primary disclose"
                     data-toggle="tooltip"
                     data-title="Open"
+                    <?= !empty($children)?'':'disabled="disabled"'?>"
                 >
                     <?= Glyph::icon(Glyph::ICON_RESIZE_FULL) ?>
                 </button>

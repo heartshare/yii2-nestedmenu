@@ -20,7 +20,7 @@
         },
         _registerEventListener: function () {
             $(document)
-                .on('create-list-item', $.proxy(this._getForm, this))
+                .on('create-list-item', $.proxy(this._appendLeaf, this))
                 .on('update-list-item', $.proxy(this._getEditForm, this));
         },
         /**
@@ -30,7 +30,7 @@
          * @private
          */
         _getEditForm: function (event, modelId) {
-            console.log('FormController->getEditForm()->modelId',modelId);
+            console.log('FormController->getEditForm()->modelId', modelId);
             var self = this,
                 promise = $.ajaxSetup({
                     headers: {
@@ -40,36 +40,36 @@
                         xhr.setRequestHeader("X-CSRFToken", self.$csrf_token);
                     }
                 });
-                promise = $.ajax({
-                    'url': updateleaf,
-                    'type': 'POST',
-                    'data':{id:modelId}
-                })
+            promise = $.ajax({
+                'url': updateleaf,
+                'type': 'POST',
+                'data': {id: modelId}
+            })
 
-                promise.done(function (formBody) {
-                    self._addFormBody(formBody, '#menu-list-config-_form_edit_list-form', 'Config bearbeiten');
-                })
+            promise.done(function (formBody) {
+                self._addFormBody(formBody, '#form_update_leaf', 'Config bearbeiten');
+            })
 
-                promise.error(function () {
-                    console.error(updateleaf + ' missmatch!')
-                });
+            promise.error(function () {
+                console.error(updateleaf + ' missmatch!')
+            });
 
 
         },
-        _getForm: function (event, root_id) {
+        _appendLeaf: function (event, root_id) {
             this.$root_id = root_id;
 
             var self = this;
-            $.ajax({
+            var promise = $.ajax({
                 'url': self.$requestUrl + '?root_id=' + self.$root_id,
                 'type': 'POST'
+            });
+            promise.done(function (formBody) {
+                self._addFormBody(formBody, '#form_create_leaf', 'Neuen Menüpunkt hinzufügen');
             })
-                .done(function (formBody) {
-                    self._addFormBody(formBody, '#form_create_leaf', 'Neuen Menüpunkt hinzufügen');
-                })
-                .error(function () {
+            promise.error(function () {
 
-                });
+            });
         },
         _addFormBody: function (body, formId, headline) {
             $('.modal-header').children('h2').text(headline);
@@ -92,6 +92,10 @@
                 self.$modalOpen = false;
             });
         },
+        /**
+         * serialize the form inputs
+         * @private
+         */
         _registerFormEvent: function () {
             var self = this;
             console.log(self.$form);
@@ -109,25 +113,27 @@
          */
         _sendForm: function (data, action) {
             var self = this;
-            $.ajax({
+            var promise = $.ajax({
                 'url': action,
                 'type': 'POST',
                 'data': data
-            }).done(function (data) {
+            })
+            promise.done(function (data) {
+                console.log(data);
+                return;
+                if (self._isJson(data)) {
+                    data = $.parseJSON(data);
                     console.log(data);
-                    return;
-                    if (self._isJson(data)) {
-                        data = $.parseJSON(data);
-                        console.log(data.redirect);
-                        self.$modalHolder.modal('hide');
+                    self.$modalHolder.modal('hide');
 //                    window.location.href= data.redirect;
-                        return;
-                    }
-                    self._addFormBody(data);
-                    self._registerFormEvent();
-                }).error(function () {
-                    console.error('failed');
-                })
+                    return;
+                }
+                self._addFormBody(data);
+                self._registerFormEvent();
+            })
+            promise.error(function () {
+                console.error('failed');
+            })
         },
         /**
          *
@@ -179,17 +185,17 @@
         $changeItem: null,
         $updateItem: null,
         $inserType: null,
-        $csrf_token:'',
-        $csrf_param:'',
+        $csrf_token: '',
+        $csrf_param: '',
         /**
          * Start
          */
         init: function () {
             var self = this;
-                self._getCsrf();
-                self.$list = $('ol#taskTree1');
-                self._setNestedSortable();
-                self._registerEventListener();
+            self._getCsrf();
+            self.$list = $('ol#taskTree1');
+            self._setNestedSortable();
+            self._registerEventListener();
         },
         /**
          * reda the token forom the header
@@ -197,8 +203,8 @@
          */
         _getCsrf: function () {
             var self = this;
-                self.$csrf_token = $('meta[name=csrf-token]').attr('content');
-                self.$csrf_param = $('meta[name=csrf-var]').attr('content');
+            self.$csrf_token = $('meta[name=csrf-token]').attr('content');
+            self.$csrf_param = $('meta[name=csrf-var]').attr('content');
         },
         /**
          * append the nestedSortable to the $list
@@ -276,7 +282,7 @@
             self.$activeItemId = $(ui.item).data('asset-id');
             self._returnItemByID(self.$startArray, self.$activeItemId, 'change');
 
-            console.log('SortTree->_changeLeaf()->changeItem',self.$changeItem);
+            console.log('SortTree->_changeLeaf()->changeItem', self.$changeItem);
         },
 
         /**
@@ -321,7 +327,7 @@
                     var response = {
                         prev: tree[index - 1],
                         leaf: leaf,
-                        next: tree[index + 1] !== undefined?tree[index+1]:false
+                        next: tree[index + 1] !== undefined ? tree[index + 1] : false
                     };
 //                    console.log('SortTree->_returnItemByID()->'+attr,response);
                     return attr === 'change' ? self.$changeItem = response : self.$updateItem = response;
@@ -417,33 +423,33 @@
             console.log('SortTree->_createInsertType()->next', next);
             console.log('SortTree->_createInsertType()->leaf', leaf);
 
-            if(prev.parent_id === leaf.parent_id){
+            if (prev.parent_id === leaf.parent_id) {
                 console.log('moveAfter : ' + prev.item_id);
                 return {
-                    moveType:'moveAfter',
-                    leafId:leaf.item_id,
-                    to:prev.item_id
+                    moveType: 'moveAfter',
+                    leafId: leaf.item_id,
+                    to: prev.item_id
                 };
             }
 
-            if(
+            if (
                 prev.parent_id === null && next.parent_id !== leaf.parent_id
-                || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id
-            ){
+                    || prev.parent_id !== leaf.parent_id && next.parent_id === leaf.parent_id
+                ) {
                 console.log('moveAsFirst : ' + leaf.parent_id);
                 return {
-                    moveType:'moveAsFirst',
-                    leafId:leaf.item_id,
-                    to:prev.item_id
+                    moveType: 'moveAsFirst',
+                    leafId: leaf.item_id,
+                    to: prev.item_id
                 };
             }
 
-            if(prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id){
+            if (prev.parent_id !== leaf.parent_id && next.parent_id !== leaf.parent_id) {
                 console.log('moveAsLast : ' + leaf.parent_id);
                 return {
-                    moveType:'moveAsLast',
-                    leafId:leaf.item_id,
-                    to:prev.item_id
+                    moveType: 'moveAsLast',
+                    leafId: leaf.item_id,
+                    to: prev.item_id
                 };
             }
 
@@ -497,7 +503,7 @@
                 });
 
             promise.done(function (response) {
-                console.log('SortTree->update()->respoonse : ',response);
+                console.log('SortTree->update()->respoonse : ', response);
 //                arraied = self.dump(arraied);
 //                (typeof($('#toArrayOutput')[0].textContent) != 'undefined') ? $('#toArrayOutput')[0].textContent = arraied : $('#toArrayOutput')[0].innerText = arraied;
             })
