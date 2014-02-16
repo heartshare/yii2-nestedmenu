@@ -200,11 +200,13 @@ class MenuController extends Controller
         $model = NestedMenuTree::find($id);
 
         if($model->load($_POST) && $model->config->load($_POST) && $model->profile->load($_POST)){
-            echo VarDumper::dump($_POST,10,true);
-            echo VarDumper::dump($model->attributes,10,true);
-            echo VarDumper::dump($model->config->attributes,10,true);
-            echo VarDumper::dump($model->profile->attributes,10,true);
-            exit;
+//            echo VarDumper::dump($_POST,10,true);
+//            echo VarDumper::dump($model->attributes,10,true);
+            $model->config->update();
+            $model->profile->update();
+//            echo VarDumper::dump($model->config->attributes,10,true);
+//            echo VarDumper::dump($model->profile->attributes,10,true);
+//            exit;
         }
         echo $this->renderPartial(
             '_form_update_leaf',
@@ -213,7 +215,7 @@ class MenuController extends Controller
                 'action' => $this->createAbsoluteUrl('updateleaf',['id' => $model->id])
             ]
         );
-        echo VarDumper::dump($_POST,10,true);
+//        echo VarDumper::dump($_POST,10,true);
     }
     /**
      * Move the leaf to the dragged position

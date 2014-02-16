@@ -39,19 +39,19 @@ class Glyph {
      */
     public static function icon($icon = '',$tag='span',$content = '',$htmlOptions = []){
         $token = uniqid($icon);
-        if (YII_DEBUG)
-            Yii::beginProfile($token, __METHOD__);
-
-        if (YII_DEBUG)
-            Yii::beginProfile('startaddcssclass'.$token, __METHOD__);
+//        if (YII_DEBUG)
+//            Yii::beginProfile($token, __METHOD__);
+//
+//        if (YII_DEBUG)
+//            Yii::beginProfile('startaddcssclass'.$token, __METHOD__);
 
         //This method is faster than 2ms Html::addCssClass($htmlOptions,'glyphicon '.$icon);
         $htmlOptions['class'] = isset($htmlOptions['class'])?$htmlOptions['class'].' glyphicon '.$icon:'glyphicon '.$icon;
 
-        if (YII_DEBUG)
-            Yii::endProfile('startaddcssclass'.$token, __METHOD__);
-        if (YII_DEBUG)
-            Yii::endProfile($token, __METHOD__);
+//        if (YII_DEBUG)
+//            Yii::endProfile('startaddcssclass'.$token, __METHOD__);
+//        if (YII_DEBUG)
+//            Yii::endProfile($token, __METHOD__);
         return Html::tag($tag,$content,$htmlOptions);
     }
 
