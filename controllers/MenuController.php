@@ -18,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\VerbFilter;
 use yii\web\View;
 
+
 /**
  * MenuController implements the CRUD actions for Menu model.
  * Class MenuController
@@ -25,6 +26,7 @@ use yii\web\View;
  */
 class MenuController extends Controller
 {
+    private $urlManager;
 
     public function behaviors()
     {
@@ -57,6 +59,9 @@ class MenuController extends Controller
         ];
     }
 
+    public function init(){
+        $this->urlManager = Yii::$app->urlManager;
+    }
 
     /**
      * Lists all Menu models.
@@ -188,7 +193,7 @@ class MenuController extends Controller
         }
         echo $this->renderPartial('_form_create_leaf', [
             'model'     => $model,
-            'action'    => $this->createAbsoluteUrl('createleaf',['root_id' => $root_id])
+            'action'    =>$this->urlManager->urlManager->createAbsoluteUrl('createleaf',['root_id' => $root_id])
         ]);
     }
 
@@ -200,20 +205,22 @@ class MenuController extends Controller
         $model = NestedMenuTree::find($id);
 
         if($model->load($_POST) && $model->config->load($_POST) && $model->profile->load($_POST)){
-            echo VarDumper::dump($_POST,10,true);
-            echo VarDumper::dump($model->attributes,10,true);
-            echo VarDumper::dump($model->config->attributes,10,true);
-            echo VarDumper::dump($model->profile->attributes,10,true);
-            exit;
+//            echo VarDumper::dump($_POST,10,true);
+//            echo VarDumper::dump($model->attributes,10,true);
+            $model->config->update();
+            $model->profile->update();
+//            echo VarDumper::dump($model->config->attributes,10,true);
+//            echo VarDumper::dump($model->profile->attributes,10,true);
+//            exit;
         }
         echo $this->renderPartial(
             '_form_update_leaf',
             [
                 'model' => $model,
-                'action' => $this->createAbsoluteUrl('updateleaf',['id' => $model->id])
+                'action' =>$this->urlManager->urlManager->createAbsoluteUrl('updateleaf',['id' => $model->id])
             ]
         );
-        echo VarDumper::dump($_POST,10,true);
+//        echo VarDumper::dump($_POST,10,true);
     }
     /**
      * Move the leaf to the dragged position
@@ -247,10 +254,10 @@ class MenuController extends Controller
     public function actionMoveleaf(){
 
 //        echo VarDumper::dump($_POST,10,true);
-        $data = $_POST['MoveList'];
+        $data       = $_POST['MoveList'];
         if( isset($data['leafId']) && isset($data['to']) && isset($data['moveType']) ){
-            $root = NestedMenuTree::find($data['to']);
-            $model = NestedMenuTree::find($data['leafId']);
+            $root   = NestedMenuTree::find($data['to']);
+            $model  = NestedMenuTree::find($data['leafId']);
             if($model->$data['moveType']($root)){
                 echo VarDumper::dump($model->attributes,10,true);
             }else{
@@ -305,17 +312,17 @@ class MenuController extends Controller
             'tooltip'
         );
         $view->registerJs(
-            'var appendTaskUrl = "'.$this->createAbsoluteUrl('createleaf').'"',
+            'var appendTaskUrl = "'.$this->urlManager->createAbsoluteUrl('createleaf').'"',
             View::POS_HEAD,
             'append-task-url'
         );
         $view->registerJs(
-            'var moveLeaf = "'.$this->createUrl('moveleaf').'"',
+            'var moveLeaf = "'.$this->urlManager->createUrl('moveleaf').'"',
             View::POS_HEAD,
             'update-list-sorting'
         );
         $view->registerJs(
-            'var updateleaf = "'.$this->createAbsoluteUrl('updateleaf',['id' => $model->id]).'"',
+            'var updateleaf = "'.$this->urlManager->createAbsoluteUrl(['updateleaf','id' => $model->id]).'"',
             View::POS_HEAD,
             'update-leaf'
         );
@@ -340,8 +347,8 @@ class MenuController extends Controller
 //        Yii::app()->clientscript->registerScriptFile($this->module->assetsUrl.'/js/menulist.js',CClientScript::POS_END);
 //        Yii::app()->clientscript->registerScriptFile($this->module->assetsUrl.'/js/menulist-events.js',CClientScript::POS_END);
 //        Yii::app()->clientscript->registerScript('profile','var voProfile = '.CJSON::encode($model->attributes),CClientScript::POS_END);
-//        Yii::app()->clientscript->registerScript('appendList','var appendTaskUrl = "'.$this->createUrl('appendMenuList',array('list_id' => $model->id)).'"',CClientScript::POS_END);
-//        Yii::app()->clientscript->registerScript('updateListSorting','var updateListSortingUrl = "'.$this->createUrl('updateListSorting').'"',CClientScript::POS_END);
-//        Yii::app()->clientscript->registerScript('updateList','var updateTreeUrl = "'.$this->createUrl('updateListItem').'"',CClientScript::POS_END);
+//        Yii::app()->clientscript->registerScript('appendList','var appendTaskUrl = "'.$this->urlManager->createUrl('appendMenuList',array('list_id' => $model->id)).'"',CClientScript::POS_END);
+//        Yii::app()->clientscript->registerScript('updateListSorting','var updateListSortingUrl = "'.$this->urlManager->createUrl('updateListSorting').'"',CClientScript::POS_END);
+//        Yii::app()->clientscript->registerScript('updateList','var updateTreeUrl = "'.$this->urlManager->createUrl('updateListItem').'"',CClientScript::POS_END);
     }
 }

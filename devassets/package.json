@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Pascal Brewig",
-  "license": "ISC",
+  "author": "Pascal Brewing",
+  "license": "BSD-3 Clause",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-release": "~0.5.1",
