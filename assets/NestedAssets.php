@@ -43,8 +43,7 @@ class NestedAssets extends AssetBundle{
         'yii\web\JqueryAsset',
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-        'yii\jui\SortableAsset',
-        'frontend\assets\AppAsset'
+        'yii\jui\SortableAsset'
     ];
     /**
      * @var array
