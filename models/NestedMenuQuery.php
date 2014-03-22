@@ -1,7 +1,7 @@
 <?php
 
 namespace nestedmenu\models;
-
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use nestedmenu\models\NestedMenuTree;
@@ -142,8 +142,8 @@ class NestedMenuQuery extends Model
                     $optionUrl =  $tree->config->url_shema;
                 }
 
-                if ($tree->config->use_visible == 1 && !empty($tree->config->visible_criteria)) {
-                    $optionVisible = Yii::app()->user->checkAccess($tree->config->visible_criteria);
+                if ((int)$tree->config->use_visible === 1 && !empty($tree->config->visible_criteria)) {
+                    $optionVisible = Yii::$app->user->checkAccess($tree->config->visible_criteria);
                 }
 
                 if ($tree->config->icon_id != null) {
@@ -163,14 +163,15 @@ class NestedMenuQuery extends Model
                 'encodeLabel'       => true,
                 'url'               => $optionUrl,
                 'active'            => $optionActive,
-                'items'             => self::checkChildrenForMenu($tree->id),
-////                'itemOptions' => array(
-////                    'itemTemplate' => '<i class="'.$optionIcon.'" ></i>{menu}'
-////                ),
-//                'icon'              => $optionIcon,
                 'visible'           => $optionVisible,
+//                'icon'              => $optionIcon,
+////                ),
+////                    'itemTemplate' => '<i class="'.$optionIcon.'" ></i>{menu}'
+////                'itemOptions' => array(
+                'items'             => self::checkChildrenForMenu($tree->id),
             );
         }
+//        VarDumper::dump($data);
         return $data;
     }
 
