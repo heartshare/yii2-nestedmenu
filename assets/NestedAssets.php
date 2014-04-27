@@ -31,10 +31,7 @@ class NestedAssets extends AssetBundle{
     public $js = [
         'js/jquery.mjs.nestedSortable.js',
         'js/menulist.js',
-        'js/menulist-events.js',
-//        'dist/js/foundation.min.js',
-//        'dist/js/foundation.topbar.js',
-//        'dist/js/app.js'
+        'js/menulist-events.js'
     ];
     /**
      * @var array

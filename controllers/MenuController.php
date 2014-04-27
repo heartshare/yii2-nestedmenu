@@ -209,6 +209,13 @@ class MenuController extends Controller
 //            echo VarDumper::dump($model->attributes,10,true);
             $model->config->update();
             $model->profile->update();
+            echo Json::encode(
+                [
+                    'validate'  => $model->validate(),
+                    'model'     => $model->attributes
+                ]
+            );
+            return;
 //            echo VarDumper::dump($model->config->attributes,10,true);
 //            echo VarDumper::dump($model->profile->attributes,10,true);
 //            exit;
@@ -216,8 +223,7 @@ class MenuController extends Controller
         echo $this->renderPartial(
             '_form_update_leaf',
             [
-                'model' => $model,
-                'action' =>$this->urlManager->createAbsoluteUrl('updateleaf',['id' => $model->id])
+                'model' => $model
             ]
         );
 //        echo VarDumper::dump($_POST,10,true);

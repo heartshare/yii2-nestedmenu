@@ -3,7 +3,7 @@ use nestedmenu\helpers\ActiveFormHelper;
 ?>
 <?php $form = \yii\widgets\ActiveForm::begin(
     [
-        'action' =>$action,
+        'action' =>Yii::$app->urlManager->createAbsoluteUrl(['nestedmenu/menu/updateleaf','id' => $model->id]),
         'id' => 'form_update_leaf'
     ]
 ); ?>
