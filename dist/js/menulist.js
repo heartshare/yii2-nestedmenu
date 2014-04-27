@@ -41,7 +41,7 @@
                     }
                 });
             promise = $.ajax({
-                'url': updateleaf,
+                'url': updateleaf+'?id='+modelId,
                 'type': 'POST',
                 'data': {id: modelId}
             })

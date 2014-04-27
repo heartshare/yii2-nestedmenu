@@ -108,7 +108,7 @@ class NestedMenuQuery extends Model
      */
     protected static function setMenuTree($id, $color)
     {
-        $root = NestedMenuTree::find($id);
+        $root = NestedMenuTree::findOne($id);
 
         if (empty($root)) {
             return array(

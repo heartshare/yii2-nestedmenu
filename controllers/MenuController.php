@@ -15,7 +15,7 @@ use yii\helpers\Json;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\VerbFilter;
+use yii\filters\VerbFilter;
 use yii\web\View;
 
 
@@ -193,7 +193,7 @@ class MenuController extends Controller
         }
         echo $this->renderPartial('_form_create_leaf', [
             'model'     => $model,
-            'action'    =>$this->urlManager->urlManager->createAbsoluteUrl('createleaf',['root_id' => $root_id])
+            'action'    =>$this->urlManager->createAbsoluteUrl('nestedmenu/menu/createleaf',['root_id' => $root_id])
         ]);
     }
 
@@ -202,7 +202,7 @@ class MenuController extends Controller
      * the config and the profile would be updated
      */
     public function actionUpdateleaf($id){
-        $model = NestedMenuTree::find($id);
+        $model = NestedMenuTree::findOne($id);
 
         if($model->load($_POST) && $model->config->load($_POST) && $model->profile->load($_POST)){
 //            echo VarDumper::dump($_POST,10,true);
@@ -217,7 +217,7 @@ class MenuController extends Controller
             '_form_update_leaf',
             [
                 'model' => $model,
-                'action' =>$this->urlManager->urlManager->createAbsoluteUrl('updateleaf',['id' => $model->id])
+                'action' =>$this->urlManager->createAbsoluteUrl('updateleaf',['id' => $model->id])
             ]
         );
 //        echo VarDumper::dump($_POST,10,true);
@@ -256,8 +256,8 @@ class MenuController extends Controller
 //        echo VarDumper::dump($_POST,10,true);
         $data       = $_POST['MoveList'];
         if( isset($data['leafId']) && isset($data['to']) && isset($data['moveType']) ){
-            $root   = NestedMenuTree::find($data['to']);
-            $model  = NestedMenuTree::find($data['leafId']);
+            $root   = NestedMenuTree::findOne($data['to']);
+            $model  = NestedMenuTree::findOne($data['leafId']);
             if($model->$data['moveType']($root)){
                 echo VarDumper::dump($model->attributes,10,true);
             }else{
@@ -288,7 +288,7 @@ class MenuController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = NestedMenuTree::find($id)) !== null) {
+        if (($model = NestedMenuTree::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -301,6 +301,7 @@ class MenuController extends Controller
     private function registerJsProfile($model)
     {
         $view = $this->getView();
+        $manager = Yii::$app->urlManager;
         $view->registerJs(
             "$('[data-toggle=\"popover\"]').popover();".PHP_EOL,
             View::POS_READY,
@@ -312,17 +313,17 @@ class MenuController extends Controller
             'tooltip'
         );
         $view->registerJs(
-            'var appendTaskUrl = "'.$this->urlManager->createAbsoluteUrl('createleaf').'"',
+            'var appendTaskUrl = "'.$manager->createAbsoluteUrl('nestedmenu/menu/createleaf').'"',
             View::POS_HEAD,
             'append-task-url'
         );
         $view->registerJs(
-            'var moveLeaf = "'.$this->urlManager->createUrl('moveleaf').'"',
+            'var moveLeaf = "'.$manager->createUrl('nestedmenu/menu/moveleaf').'"',
             View::POS_HEAD,
             'update-list-sorting'
         );
         $view->registerJs(
-            'var updateleaf = "'.$this->urlManager->createAbsoluteUrl(['updateleaf','id' => $model->id]).'"',
+            'var updateleaf = "'.$manager->createAbsoluteUrl(['nestedmenu/menu/updateleaf']).'"',
             View::POS_HEAD,
             'update-leaf'
         );

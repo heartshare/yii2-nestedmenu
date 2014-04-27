@@ -12,7 +12,7 @@ $(function(){
 
     $('.editListItem').on('click',function(event){
         event.preventDefault();
-        console.log(this);
+        console.log($('.editListItem'),$(this).data());
         $(document).trigger('update-list-item',[$(this).data('id')]);
     });
 });
