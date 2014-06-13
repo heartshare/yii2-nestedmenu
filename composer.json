@@ -1,0 +1,32 @@
+{
+    "name": "drmabuse/nestedmenu",
+    "description": "Yii 2 Nested Set Menu",
+    "keywords": ["yii-2", "nestedset","menu" ],
+    "homepage": "http://pascal-brewing.de",
+    "type": "yii2-module",
+    "license": "BSD-3-Clause",
+    "version": "0.0.3",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "dev-master",
+        "yiisoft/yii2-bootstrap": "dev-master",
+        "yiisoft/yii2-jui": "*"
+    },
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Pascal Brewing",
+            "email": "pascalbrewing@gmail.com",
+            "homepage": "http://pascal-brewing.de/",
+            "role": "Founder and development"
+        }
+    ],
+    "support": {
+        "source": "https://bitbucket.org/DrMabuse/nestedmenu/src"
+    },
+    "autoload": {
+        "psr-4": {
+            "nestedmenu\\": "/"
+        }
+    }
+}
